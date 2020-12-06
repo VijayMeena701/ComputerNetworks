@@ -22,7 +22,6 @@ long int encKey = 1020;
 char msg[2080];
 void encrypt(char str[]);
 void decrypt(char str[]);
-int checkUser(char str[]);
 
 
 void str_overwrite_stdout() {
@@ -75,8 +74,8 @@ void recv_msg_handler() {
 	while (1) {
 		int receive = recv(sockfd, message, LENGTH, 0);
 		if (receive > 0) {
-			int x = checkUser(message);
-			if(x == 1){
+			
+			if(message[LENGTH] == 10){
 				printf("%s",message);
 			}
 			else{
@@ -170,35 +169,4 @@ void encrypt(char str[]){
 void decrypt(char str[]){
     for(int i = 0; (str[i] != '\0'); i++)
     	str[i] = str[i] - encKey;
-}
-
-int checkUser(char str[]){
-    int search[2];
-	search[0] =10;
-	search[1] = 10;
-    int count1 = 0, count2 = 0, i, j, flag;
-    while (str[count1] != '\0')
-        count1++;
-    while (search[count2] != '\0')
-        count2++;
-    for (i = 0; i <= count1 - count2; i++)
-    {
-        for (j = i; j < i + count2; j++)
-        {
-            flag = 1;
-            if (str[j] != search[j - i])
-            {
-                flag = 0;
-                break;
-            }
-        }
-        if (flag == 1)
-            break;
-    }
-    if (flag == 1)
-        return 1;
-    else
-        return 0;
- 
-    return 0;
 }
